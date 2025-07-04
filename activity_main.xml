@@ -1,0 +1,20 @@
+<ConstraintLayout ...>
+  <TextView
+      android:id="@+id/textCity"
+      android:text="City"
+      android:textSize="24sp" .../>
+
+  <TextView
+      android:id="@+id/textTemp"
+      android:text="0°C"
+      android:textSize="48sp" .../>
+
+  <ImageView
+      android:id="@+id/imgIcon"
+      android:layout_width="100dp"
+      android:layout_height="100dp" .../>
+
+  <Button
+      android:id="@+id/btnRefresh"
+      android:text="Refresh" .../>
+</ConstraintLayout>

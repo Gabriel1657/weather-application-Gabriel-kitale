@@ -1,0 +1,40 @@
+class MainActivity : AppCompatActivity() {
+  private val apiKey = "YOUR_OPENWEATHERMAP_API_KEY"
+
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(R.layout.activity_main)
+  
+    findViewById<Button>(R.id.btnRefresh).setOnClickListener {
+      updateWeather()
+    }
+
+    updateWeather()
+  }
+
+  private fun updateWeather() {
+    getLastLocation { lat, lon ->
+      CoroutineScope(Dispatchers.IO).launch {
+        try {
+          val res = ApiClient.instance.getWeather(lat, lon, apiKey)
+          withContext(Dispatchers.Main) {
+            showWeather(res)
+          }
+        } catch (e: Exception) {
+          e.printStackTrace()
+          runOnUiThread {
+            Toast.makeText(this@MainActivity, "Failed to fetch data", Toast.LENGTH_SHORT).show()
+          }
+        }
+      }
+    }
+  }
+
+  private fun showWeather(data: WeatherResponse) {
+    findViewById<TextView>(R.id.textCity).text = data.name
+    findViewById<TextView>(R.id.textTemp).text = "%.0f°C".format(data.main.temp)
+    val iconCode = data.weather.firstOrNull()?.icon
+    val url = "https://openweathermap.org/img/w/$iconCode.png"
+    Glide.with(this).load(url).into(findViewById(R.id.imgIcon))
+  }
+}

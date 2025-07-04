@@ -1,0 +1,9 @@
+private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+private fun getLastLocation(onLocation: (lat: Double, lon: Double) -> Unit) {
+  fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+  fusedLocationClient.lastLocation
+    .addOnSuccessListener { location ->
+      location?.let { onLocation(it.latitude, it.longitude) }
+    }
+}
